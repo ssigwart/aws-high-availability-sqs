@@ -59,7 +59,8 @@ class AwsHighAvailabilitySqsReceiver
 	{
 		// Build request
 		$req = [
-			'AttributeNames' => 'All',
+			'AttributeNames' => ['All'],
+			'MessageAttributeNames' => ['All'],
 			'MaxNumberOfMessages' => $metadata?->getMaxNumMessages() ?? 1,
 			'QueueUrl' => $sqsQueue->getQueueUrl(),
 		];

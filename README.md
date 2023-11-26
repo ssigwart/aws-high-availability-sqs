@@ -49,7 +49,7 @@ $backupLocation = new S3FileBucketAndKey('us-east-2', 'phpunit-test-us-east-2', 
 $s3Locations = new S3AvailableUploadFileBucketAndKeyLocations($primaryLocation);
 $s3Locations->addAlternativeLocation($backupLocation);
 
-// Receive messages
+// Send messages
 $sqsSender = new AwsHighAvailabilitySqsSender($awsSdk);
 $result = $sqsSender->sendMessageWithS3LargeMessageBacking($availableQueues, $s3Locations, $queueMsgBody, null);
 print 'Selected Queue: ' . $result->getSelectedQueue()->getQueueUrl() . PHP_EOL;
@@ -84,7 +84,7 @@ foreach ($sqsMessagesResult->getSqsMessages() as $sqsMessage)
 {
 	print 'Messages ID: ' . $sqsMessage->getMessageId() . PHP_EOL;
 	print 'Receipt Handle: ' . $sqsMessage->getReceiptHandle() . PHP_EOL;
-	print 'Messages Body: ' . $sqsMessage->getMessage() . PHP_EOL;
+	print 'Message Body: ' . $sqsMessage->getMessage() . PHP_EOL;
 }
 ```
 

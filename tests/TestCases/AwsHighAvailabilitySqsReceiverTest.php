@@ -33,7 +33,8 @@ class AwsHighAvailabilitySqsReceiverTest extends UnitTestCase
 		$awsSdk = $this->getMockAwsSdk();
 		$sqsUsEast1 = $this->getMockSqsClientForReceiveMessage([
 			[
-				'AttributeNames' => 'All',
+				'AttributeNames' => ['All'],
+				'MessageAttributeNames' => ['All'],
 				'MaxNumberOfMessages' => $metadata->getMaxNumMessages(),
 				'QueueUrl' => $primaryQueue->getQueueUrl(),
 				'VisibilityTimeout' => $metadata->getVisibilityTimeout(),
