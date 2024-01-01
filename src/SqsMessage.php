@@ -116,4 +116,64 @@ class SqsMessage
 			throw new TypeError('Attribute "' . $attribute . '" value of "' . $str . '" is not an int.');
 		return (int)$str;
 	}
+
+	/**
+	 * Get message SQS attributes
+	 *
+	 * @return array SQS message attributes
+	 */
+	public function getMessageSqsAttributes(): array
+	{
+		return $this->msg['Attributes'];
+	}
+
+	/**
+	 * Get send timestamp
+	 *
+	 * @return int Send timestamp
+	 */
+	public function getSentTimestamp(): int
+	{
+		return (int)floor($this->getSentTimestampInMs() / 1000);
+	}
+
+	/**
+	 * Get send timestamp in milliseconds
+	 *
+	 * @return int Send timestamp in milliseconds
+	 */
+	public function getSentTimestampInMs(): int
+	{
+		return (int)$this->msg['Attributes']['SentTimestamp'];
+	}
+
+	/**
+	 * Get approximate receive count
+	 *
+	 * @return int Approximate receive count
+	 */
+	public function getApproximateReceiveCount(): int
+	{
+		return (int)$this->msg['Attributes']['ApproximateReceiveCount'];
+	}
+
+	/**
+	 * Get approximate first receive timestamp
+	 *
+	 * @return int Approximate first receive timestamp
+	 */
+	public function getApproximateFirstReceiveTimestamp(): int
+	{
+		return (int)floor($this->getApproximateFirstReceiveTimestampInMs() / 1000);
+	}
+
+	/**
+	 * Get approximate first receive timestamp in milliseconds
+	 *
+	 * @return int Approximate first receive timestamp in milliseconds
+	 */
+	public function getApproximateFirstReceiveTimestampInMs(): int
+	{
+		return (int)$this->msg['Attributes']['ApproximateFirstReceiveTimestamp'];
+	}
 }

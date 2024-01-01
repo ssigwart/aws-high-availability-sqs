@@ -58,6 +58,12 @@ class SqsMessageTest extends UnitTestCase
 		$messageId = 'abcd-1234';
 		$msg = new SqsMessage([
 			'MessageId' => $messageId,
+			'Attributes' => [
+				'SenderId' => '000000000000',
+				'SentTimestamp' => '1704133701867',
+				'ApproximateReceiveCount' => '1',
+				'ApproximateFirstReceiveTimestamp' => '1704133701936'
+			],
 			'MessageAttributes' => [
 				'string_1' => [
 					'DataType' => 'String',
@@ -77,6 +83,12 @@ class SqsMessageTest extends UnitTestCase
 				]
 			]
 		]);
+
+		self::assertEquals(1704133701, $msg->getSentTimestamp());
+		self::assertEquals(1704133701867, $msg->getSentTimestampInMs());
+		self::assertEquals(1704133701, $msg->getApproximateFirstReceiveTimestamp());
+		self::assertEquals(1704133701936, $msg->getApproximateFirstReceiveTimestampInMs());
+		self::assertEquals(1, $msg->getApproximateReceiveCount());
 
 		self::assertEquals('String 1', $msg->getStringMessageAttribute('string_1'));
 		self::assertEquals('String 2', $msg->getStringMessageAttribute('string_2'));
