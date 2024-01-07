@@ -82,28 +82,31 @@ class AwsHighAvailabilitySqsReceiver
 				'region' => $sqsQueue->getAwsRegion()
 			])->receiveMessage($req);
 			$rtn = new ReceiveSqsMessagesResult();
-			foreach ($result['Messages'] as $msg)
+			if (!empty($result['Messages']))
 			{
-				$sqsMessage = new SqsMessage($msg);
-
-				// Download from S3 if needed
-				$s3FileInfo = $sqsMessage->getStringMessageAttribute('HA-SQS.S3_FILE');
-				if ($s3FileInfo !== null)
+				foreach ($result['Messages'] as $msg)
 				{
-					if (!preg_match('/^([^:]+):([^:]+):(.*)$/AD', $s3FileInfo, $match))
-						throw new AwsHighAvailabilitySqsReceiverException('Unexpected S3 file attribute with value "' . $s3FileInfo . '".');
-					$this->setUpS3Downloader();
-					$sqsMessage = null;
-					$s3File = new S3FileBucketAndKey($match[1], $match[2], $match[3]);
-					$msg['Body'] = $this->s3Downloader->downloadFileFromS3(new S3AvailableDownloadFileBucketAndKeyLocations(
-						$s3File
-					));
 					$sqsMessage = new SqsMessage($msg);
-					$sqsMessage->setS3File($s3File);
-				}
 
-				// Add to list of messages
-				$rtn->addSqsMessage($sqsMessage);
+					// Download from S3 if needed
+					$s3FileInfo = $sqsMessage->getStringMessageAttribute('HA-SQS.S3_FILE');
+					if ($s3FileInfo !== null)
+					{
+						if (!preg_match('/^([^:]+):([^:]+):(.*)$/AD', $s3FileInfo, $match))
+							throw new AwsHighAvailabilitySqsReceiverException('Unexpected S3 file attribute with value "' . $s3FileInfo . '".');
+						$this->setUpS3Downloader();
+						$sqsMessage = null;
+						$s3File = new S3FileBucketAndKey($match[1], $match[2], $match[3]);
+						$msg['Body'] = $this->s3Downloader->downloadFileFromS3(new S3AvailableDownloadFileBucketAndKeyLocations(
+							$s3File
+						));
+						$sqsMessage = new SqsMessage($msg);
+						$sqsMessage->setS3File($s3File);
+					}
+
+					// Add to list of messages
+					$rtn->addSqsMessage($sqsMessage);
+				}
 			}
 
 			return $rtn;
