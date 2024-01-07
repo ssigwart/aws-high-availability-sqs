@@ -81,7 +81,7 @@ class AwsHighAvailabilitySqsSender
 				// Save in S3, clear body and set message attribute
 				$this->setUpS3Uploader();
 				$finalLocation = $this->s3Uploader->uploadPrivateFileToS3($s3Locations, $msgBody, 'text/plain', null);
-				$msgBody = '';
+				$msgBody = ' ';
 				$attrs['HA-SQS.S3_FILE'] = new SqsMessageAttribute(SqsMessageAttribute::DATA_TYPE_STRING, $finalLocation->getS3BucketRegion() . ':' . $finalLocation->getS3Bucket() . ':' . $finalLocation->getS3Key());
 			} catch (Throwable $e) {
 				// Use this to help with unit testing

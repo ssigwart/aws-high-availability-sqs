@@ -134,7 +134,7 @@ class AwsHighAvailabilitySqsSenderTest extends UnitTestCase
 		], $s3UsEast1);
 		$sqsUsEast1 = $this->getMockSqsClientForSendMessage([
 			[
-				'MessageBody' => '',
+				'MessageBody' => ' ',
 				'QueueUrl' => $primaryQueue->getQueueUrl(),
 				'MessageAttributes' => [
 					'HA-SQS.S3_FILE' => [
@@ -202,7 +202,7 @@ class AwsHighAvailabilitySqsSenderTest extends UnitTestCase
 		], $s3UsEast2);
 		$sqsUsEast1 = $this->getMockSqsClientForSendMessage([
 			[
-				'MessageBody' => '',
+				'MessageBody' => ' ',
 				'QueueUrl' => $primaryQueue->getQueueUrl(),
 				'MessageAttributes' => [
 					'HA-SQS.S3_FILE' => [
